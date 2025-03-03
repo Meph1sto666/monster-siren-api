@@ -30,6 +30,9 @@ impl Lyrics {
     }
 }
 
+/**
+ * Fetch the lyrics of a song from the url to its lyrics file.
+ */
 pub async fn from_lyrics_url(url: &str) -> Result<Lyrics, Box<dyn Error>> {
     let lines: Vec<SyncedLine> = reqwest::get(url)
         .await?

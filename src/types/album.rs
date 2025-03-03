@@ -26,6 +26,9 @@ pub struct AlbumSyn {
     artists: Vec<String>,
 }
 
+/**
+ * Fetch the album data from MSR by its ID.
+ */
 pub async fn fetch_album_details(id: &str) -> Result<Album, Box<dyn Error>> {
     let album: song::MSResponse<Album> = reqwest::get(format!(
         "https://monster-siren.hypergryph.com/api/album/{id}/detail"
@@ -36,6 +39,10 @@ pub async fn fetch_album_details(id: &str) -> Result<Album, Box<dyn Error>> {
     Ok(album.data)
 }
 
+/**
+ * Fetch a list of all albums currently available bt MSR.
+ * The list consists of album synopses only
+ */
 pub async fn fetch_album_list() -> Result<Vec<AlbumSyn>, Box<dyn Error>> {
     let albums: song::MSResponse<Vec<AlbumSyn>> =
         reqwest::get("https://monster-siren.hypergryph.com/api/albums")

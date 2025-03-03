@@ -78,6 +78,20 @@ impl Song {
     }
 }
 
+impl SongSyn {
+    /**
+     * Fetch song details via the songs synopsis
+     */
+    pub async fn get_details(&self) -> Result<Song, Box<dyn Error>> {
+        Ok(fetch_song_details(&self.cid).await?)
+    }
+}
+impl Clone for SongSyn {
+    fn clone(&self) -> Self {
+        Self { cid: self.cid.clone(), name: self.name.clone(), album_cid: self.album_cid.clone(), artists: self.artists.clone() }
+    }
+}
+
 /**
  * Fetch the list of songs currently available on MSR.
  * The list consists of song synopses only
