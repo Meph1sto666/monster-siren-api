@@ -43,6 +43,20 @@ impl PartialEq for Song {
     }
 }
 
+impl Song {
+    /**
+     * Get the release date of a song from the source URL.
+     */
+    pub fn get_release_date(&self) -> chrono::NaiveDate {
+        let suff: &str = self.source_url.split("siren/audio/").collect::<Vec<&str>>()[1];
+        let date_str: &str = suff.split("/").collect::<Vec<&str>>()[0];
+        let year: i32 = date_str.split_at(4).0.parse().unwrap();
+        let month: u32 = date_str.split_at(4).1.split_at(2).0.parse().unwrap();
+        let day: u32 = date_str.split_at(4).1.split_at(2).1.parse().unwrap();
+        chrono::NaiveDate::from_ymd_opt(year, month, day).unwrap()
+    }
+}
+
 /**
  * Fetch the list of songs currently available on MSR.
  * The list consists of song synapsis's only

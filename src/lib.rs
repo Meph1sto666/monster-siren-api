@@ -47,4 +47,12 @@ mod tests {
         assert!(lyrics.lines_ref()[1].content_ref().eq("Hoping that these empty halls are here to guide my way"));
         println!("{}", lyrics.to_lrc());
     }
+    
+    
+    #[tokio::test]
+    async fn test_get_release_date() {
+        let song: Song = fetch_song_details("880318").await.unwrap();
+        let date: chrono::NaiveDate = song.get_release_date();
+        assert!(date.eq(&chrono::NaiveDate::from_ymd_opt(2024, 11, 15).unwrap()))
+    }
 }
