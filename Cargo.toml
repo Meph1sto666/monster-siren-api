@@ -13,6 +13,7 @@ debug = false
 overflow-checks = false
 
 [dependencies]
+chrono = { version = "0.4.40", features = ["serde"] }
 getters2 = "0.1.4"
 reqwest = { version = "0.12.12", features = ["json"] }
 serde = { version = "1.0.218", features = ["derive"] }
