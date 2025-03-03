@@ -2,7 +2,7 @@ pub mod types;
 
 #[cfg(test)]
 mod tests {
-	use crate::types::song::{fetch_autoplay_song_id, fetch_song_details, fetch_song_list, Song};
+	use crate::types::{album::{fetch_album_details, fetch_album_list, Album}, song::{fetch_autoplay_song_id, fetch_song_details, fetch_song_list, Song}};
 	use tokio;
 
 	#[tokio::test]
@@ -22,5 +22,21 @@ mod tests {
 		assert!(song.cid_ref().eq("880318"));
 		assert!(song.name_ref().eq("Protocol"));
 		assert!(song.album_cid_ref().eq("7769"));
+	}
+
+
+	#[tokio::test]
+	async fn test_fetch_album_details() {
+		let album: Album = fetch_album_details("7769").await.unwrap();
+		assert!(album.cid_ref().eq("7769"));
+		assert!(album.name_ref().eq("卫戍协议OST"));
+		assert!(album.songs_ref().len() == 2);
+	}
+	#[tokio::test]
+	async fn test_fetch_album_list() {
+		let albums: Vec<crate::types::album::AlbumSyn> = fetch_album_list().await.unwrap();
+		let a0: &crate::types::album::AlbumSyn = albums.get(0).unwrap();
+		assert!(albums.len() >= 215);
+		assert!(a0.cid_ref().eq("4504"))
 	}
 }

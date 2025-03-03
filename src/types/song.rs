@@ -8,7 +8,8 @@ pub struct SongSyn {
     cid: String,
     name: String,
     #[serde(alias = "albumCid")]
-    album_cid: String,
+    album_cid: Option<String>,
+    #[serde(alias = "artistes")]
     artists: Vec<String>,
 }
 
@@ -78,10 +79,10 @@ struct ResponseData {
 }
 #[derive(serde::Deserialize)]
 #[allow(unused)]
-struct MSResponse<T> {
+pub(crate) struct MSResponse<T> {
     code: i32,
     msg: String,
-    data: T,
+    pub(crate) data: T,
 }
 async fn fetch_songs_raw() -> Result<MSResponse<ResponseData>, Box<dyn Error>> {
     let res: MSResponse<ResponseData> =
