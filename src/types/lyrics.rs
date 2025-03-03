@@ -18,10 +18,10 @@ impl Lyrics {
             .iter()
             .map(|v| {
                 format!(
-                    "[{:0>2}:{:0>2}.{:0>2}]{}",
+                    "[{:0>2}:{:0>2}.{:0<3}]{}",
                     v.stamp.num_minutes(),
-                    v.stamp.num_seconds()%60,
-                    v.stamp.num_milliseconds()%1000,
+                    v.stamp.num_seconds() % 60,
+                    v.stamp.num_milliseconds() % 1000,
                     v.content
                 )
             })
@@ -36,9 +36,10 @@ pub async fn from_lyrics_url(url: &str) -> Result<Lyrics, Box<dyn Error>> {
         .text()
         .await?
         .lines()
+        .filter(|e| e.len() > 0)
         .map(|l| SyncedLine {
-            stamp: sync_stamp_to_duration(l.split_at(10).0).unwrap(),
-            content: l.split_at(10).1.trim().to_owned(),
+            stamp: sync_stamp_to_duration(l.split("]").collect::<Vec<&str>>()[0]).unwrap(),
+            content: l.split("]").collect::<Vec<&str>>()[1].trim().to_owned(),
         })
         .collect::<Vec<SyncedLine>>();
     Ok(Lyrics { lines })
