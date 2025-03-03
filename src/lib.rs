@@ -26,6 +26,20 @@ mod tests {
         assert!(song.album_cid_ref().eq("7769"));
     }
 
+	#[tokio::test]
+	async fn test_fetch_song_index() {
+		assert!(fetch_song_details("880318").await.unwrap().fetch_song_index().await.unwrap() == 1);
+		assert!(fetch_song_details("880319").await.unwrap().fetch_song_index().await.unwrap() == 2);
+	}
+
+	#[tokio::test]
+	async fn test_get_song_index() {
+		let album: Album = fetch_album_details("9385").await.unwrap();
+		assert!(fetch_song_details("697619").await.unwrap().get_song_index(&album).unwrap() == 1);
+		assert!(fetch_song_details("125065").await.unwrap().get_song_index(&album).unwrap() == 7);
+		assert!(fetch_song_details("880329").await.unwrap().get_song_index(&album).unwrap() == 11);
+	}
+
     #[tokio::test]
     async fn test_fetch_album_details() {
         let album: Album = fetch_album_details("7769").await.unwrap();
@@ -51,8 +65,7 @@ mod tests {
     
     #[tokio::test]
     async fn test_get_release_date() {
-        let song: Song = fetch_song_details("880318").await.unwrap();
-        let date: chrono::NaiveDate = song.get_release_date();
-        assert!(date.eq(&chrono::NaiveDate::from_ymd_opt(2024, 11, 15).unwrap()))
+        assert!(fetch_song_details("880318").await.unwrap().get_release_date().eq(&chrono::NaiveDate::from_ymd_opt(2024, 11, 15).unwrap()));
+        assert!(fetch_song_details("232258").await.unwrap().get_release_date().eq(&chrono::NaiveDate::from_ymd_opt(2023, 12, 28).unwrap()));
     }
 }

@@ -1,3 +1,4 @@
+use super::album::{fetch_album_details, Album};
 use getters2::Getters;
 use reqwest;
 use serde;
@@ -55,11 +56,31 @@ impl Song {
         let day: u32 = date_str.split_at(4).1.split_at(2).1.parse().unwrap();
         chrono::NaiveDate::from_ymd_opt(year, month, day).unwrap()
     }
+
+    /**
+     * Get the index of a song in its album.
+     */
+    pub fn get_song_index(&self, album: &Album) -> Result<u16, Box<dyn Error>> {
+        Ok(album
+            .songs_ref()
+            .iter()
+            .position(|s: &SongSyn| s.cid_ref().eq(&self.cid))
+            .unwrap() as u16 + 1)
+    }
+
+    /**
+     * Get the index of a song in its album.
+     * Same as get_song_index, but fetches the album details itself.
+     */
+    pub async fn fetch_song_index(&self) -> Result<u16, Box<dyn Error>> {
+        let album: Album = fetch_album_details(&self.album_cid).await?;
+        Ok(self.get_song_index(&album)?)
+    }
 }
 
 /**
  * Fetch the list of songs currently available on MSR.
- * The list consists of song synapsis's only
+ * The list consists of song synopses only
  */
 pub async fn fetch_song_list() -> Result<Vec<SongSyn>, Box<dyn Error>> {
     Ok(fetch_songs_raw().await?.data.list)
