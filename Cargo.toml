@@ -2,6 +2,12 @@
 name = "msr-api"
 version = "0.1.0"
 edition = "2021"
+authors = ["Meph1sto666"]
+description = "Wrapper for Monster-Siren's API"
+repository = "https://github.com/Meph1sto666/monster-siren-api"
+license = "MIT"
+keywords = ["arknights", "audio", "monster-siren", "msr", "wrapper"]
+categories = ["web-programming::http-client"]
 
 [profile.test]
 opt-level = 0
